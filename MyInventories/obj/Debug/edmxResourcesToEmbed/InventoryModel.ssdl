@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="langModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="order">
+    <Key>
+      <PropertyRef Name="orderid" />
+    </Key>
+    <Property Name="orderid" Type="int" Nullable="false" />
+    <Property Name="orderdate" Type="date" Nullable="false" />
+    <Property Name="totalamount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="orderdetail">
+    <Key>
+      <PropertyRef Name="orderdetailID" />
+    </Key>
+    <Property Name="orderdetailID" Type="int" Nullable="false" />
+    <Property Name="quantity" Type="int" Nullable="false" />
+    <Property Name="listprice" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="orderID" Type="int" Nullable="false" />
+    <Property Name="productID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="int" Nullable="false" />
+    <Property Name="prodname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="quantity" Type="int" />
+    <Property Name="price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="warehouseID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="roleid" />
+    </Key>
+    <Property Name="roleid" Type="int" Nullable="false" />
+    <Property Name="rolename" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="useraccount">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="userid" Type="nvarchar(max)" />
+    <Property Name="username" Type="nvarchar" MaxLength="100" />
+    <Property Name="password" Type="nvarchar" MaxLength="100" />
+    <Property Name="email" Type="nvarchar" MaxLength="100" />
+    <Property Name="status" Type="int" />
+    <Property Name="roleid" Type="int" />
+    <Property Name="code" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="userinformation">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="userid" Type="nvarchar" MaxLength="255" />
+    <Property Name="lastname" Type="nvarchar" MaxLength="255" />
+    <Property Name="firstname" Type="nvarchar" MaxLength="255" />
+    <Property Name="phone" Type="nvarchar" MaxLength="255" />
+    <Property Name="email" Type="nvarchar" MaxLength="255" />
+    <Property Name="city" Type="nvarchar" MaxLength="255" />
+    <Property Name="zipcode" Type="nvarchar" MaxLength="5" />
+    <Property Name="active" Type="int" />
+    <Property Name="managerid" Type="int" />
+  </EntityType>
+  <EntityType Name="warehouse">
+    <Key>
+      <PropertyRef Name="warehouseID" />
+    </Key>
+    <Property Name="warehouseID" Type="int" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="location" Type="nvarchar" MaxLength="50" />
+    <Property Name="capacity" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'lang.dbo.View_role' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="View_role">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="rolename" />
+    </Key>
+    <Property Name="id" Type="int" Nullable="false" />
+    <Property Name="username" Type="nvarchar" MaxLength="100" />
+    <Property Name="rolename" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__orderdeta__order__4AB81AF0">
+    <End Role="order" Type="Self.order" Multiplicity="1" />
+    <End Role="orderdetail" Type="Self.orderdetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="order">
+        <PropertyRef Name="orderid" />
+      </Principal>
+      <Dependent Role="orderdetail">
+        <PropertyRef Name="orderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__orderdeta__produ__4BAC3F29">
+    <End Role="product" Type="Self.product" Multiplicity="1" />
+    <End Role="orderdetail" Type="Self.orderdetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="orderdetail">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__product__warehou__44FF419A">
+    <End Role="warehouse" Type="Self.warehouse" Multiplicity="1" />
+    <End Role="product" Type="Self.product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="warehouse">
+        <PropertyRef Name="warehouseID" />
+      </Principal>
+      <Dependent Role="product">
+        <PropertyRef Name="warehouseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__useraccou__rolei__47DBAE45">
+    <End Role="role" Type="Self.role" Multiplicity="0..1" />
+    <End Role="useraccount" Type="Self.useraccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="role">
+        <PropertyRef Name="roleid" />
+      </Principal>
+      <Dependent Role="useraccount">
+        <PropertyRef Name="roleid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_useraccount_role">
+    <End Role="useraccount" Type="Self.useraccount" Multiplicity="1" />
+    <End Role="useraccount1" Type="Self.useraccount" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="useraccount">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="useraccount1">
+        <PropertyRef Name="id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="langModelStoreContainer">
+    <EntitySet Name="order" EntityType="Self.order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="orderdetail" EntityType="Self.orderdetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="role" EntityType="Self.role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="useraccount" EntityType="Self.useraccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="userinformation" EntityType="Self.userinformation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="warehouse" EntityType="Self.warehouse" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="View_role" EntityType="Self.View_role" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [View_role].[id] AS [id], 
+    [View_role].[username] AS [username], 
+    [View_role].[rolename] AS [rolename]
+    FROM [dbo].[View_role] AS [View_role]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__orderdeta__order__4AB81AF0" Association="Self.FK__orderdeta__order__4AB81AF0">
+      <End Role="order" EntitySet="order" />
+      <End Role="orderdetail" EntitySet="orderdetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__orderdeta__produ__4BAC3F29" Association="Self.FK__orderdeta__produ__4BAC3F29">
+      <End Role="product" EntitySet="product" />
+      <End Role="orderdetail" EntitySet="orderdetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__product__warehou__44FF419A" Association="Self.FK__product__warehou__44FF419A">
+      <End Role="warehouse" EntitySet="warehouse" />
+      <End Role="product" EntitySet="product" />
+    </AssociationSet>
+    <AssociationSet Name="FK__useraccou__rolei__47DBAE45" Association="Self.FK__useraccou__rolei__47DBAE45">
+      <End Role="role" EntitySet="role" />
+      <End Role="useraccount" EntitySet="useraccount" />
+    </AssociationSet>
+    <AssociationSet Name="FK_useraccount_role" Association="Self.FK_useraccount_role">
+      <End Role="useraccount" EntitySet="useraccount" />
+      <End Role="useraccount1" EntitySet="useraccount" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

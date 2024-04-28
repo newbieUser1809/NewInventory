@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="langModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="order">
+    <Key>
+      <PropertyRef Name="orderid" />
+    </Key>
+    <Property Name="orderid" Type="Int32" Nullable="false" />
+    <Property Name="orderdate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="totalamount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+    <NavigationProperty Name="orderdetails" Relationship="Self.FK__orderdeta__order__4AB81AF0" FromRole="order" ToRole="orderdetail" />
+  </EntityType>
+  <EntityType Name="orderdetail">
+    <Key>
+      <PropertyRef Name="orderdetailID" />
+    </Key>
+    <Property Name="orderdetailID" Type="Int32" Nullable="false" />
+    <Property Name="quantity" Type="Int32" Nullable="false" />
+    <Property Name="listprice" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="orderID" Type="Int32" Nullable="false" />
+    <Property Name="productID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="order" Relationship="Self.FK__orderdeta__order__4AB81AF0" FromRole="orderdetail" ToRole="order" />
+    <NavigationProperty Name="product" Relationship="Self.FK__orderdeta__produ__4BAC3F29" FromRole="orderdetail" ToRole="product" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="Int32" Nullable="false" />
+    <Property Name="prodname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="quantity" Type="Int32" />
+    <Property Name="price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="warehouseID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="orderdetails" Relationship="Self.FK__orderdeta__produ__4BAC3F29" FromRole="product" ToRole="orderdetail" />
+    <NavigationProperty Name="warehouse" Relationship="Self.FK__product__warehou__44FF419A" FromRole="product" ToRole="warehouse" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="roleid" />
+    </Key>
+    <Property Name="roleid" Type="Int32" Nullable="false" />
+    <Property Name="rolename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="useraccounts" Relationship="Self.FK__useraccou__rolei__47DBAE45" FromRole="role" ToRole="useraccount" />
+  </EntityType>
+  <EntityType Name="useraccount">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="userid" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="status" Type="Int32" />
+    <Property Name="roleid" Type="Int32" />
+    <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="role" Relationship="Self.FK__useraccou__rolei__47DBAE45" FromRole="useraccount" ToRole="role" />
+    <NavigationProperty Name="useraccount1" Relationship="Self.FK_useraccount_role" FromRole="useraccount" ToRole="useraccount1" />
+    <NavigationProperty Name="useraccount2" Relationship="Self.FK_useraccount_role" FromRole="useraccount1" ToRole="useraccount" />
+  </EntityType>
+  <EntityType Name="userinformation">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="userid" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="lastname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="firstname" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="phone" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="zipcode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+    <Property Name="active" Type="Int32" />
+    <Property Name="managerid" Type="Int32" />
+  </EntityType>
+  <EntityType Name="warehouse">
+    <Key>
+      <PropertyRef Name="warehouseID" />
+    </Key>
+    <Property Name="warehouseID" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="capacity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="products" Relationship="Self.FK__product__warehou__44FF419A" FromRole="warehouse" ToRole="product" />
+  </EntityType>
+  <EntityType Name="View_role">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="rolename" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="rolename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__orderdeta__order__4AB81AF0">
+    <End Role="order" Type="Self.order" Multiplicity="1" />
+    <End Role="orderdetail" Type="Self.orderdetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="order">
+        <PropertyRef Name="orderid" />
+      </Principal>
+      <Dependent Role="orderdetail">
+        <PropertyRef Name="orderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__orderdeta__produ__4BAC3F29">
+    <End Role="product" Type="Self.product" Multiplicity="1" />
+    <End Role="orderdetail" Type="Self.orderdetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="orderdetail">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__product__warehou__44FF419A">
+    <End Role="warehouse" Type="Self.warehouse" Multiplicity="1" />
+    <End Role="product" Type="Self.product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="warehouse">
+        <PropertyRef Name="warehouseID" />
+      </Principal>
+      <Dependent Role="product">
+        <PropertyRef Name="warehouseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__useraccou__rolei__47DBAE45">
+    <End Role="role" Type="Self.role" Multiplicity="0..1" />
+    <End Role="useraccount" Type="Self.useraccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="role">
+        <PropertyRef Name="roleid" />
+      </Principal>
+      <Dependent Role="useraccount">
+        <PropertyRef Name="roleid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_useraccount_role">
+    <End Role="useraccount" Type="Self.useraccount" Multiplicity="1" />
+    <End Role="useraccount1" Type="Self.useraccount" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="useraccount">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="useraccount1">
+        <PropertyRef Name="id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="langEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="orders" EntityType="Self.order" />
+    <EntitySet Name="orderdetails" EntityType="Self.orderdetail" />
+    <EntitySet Name="products" EntityType="Self.product" />
+    <EntitySet Name="roles" EntityType="Self.role" />
+    <EntitySet Name="useraccounts" EntityType="Self.useraccount" />
+    <EntitySet Name="userinformations" EntityType="Self.userinformation" />
+    <EntitySet Name="warehouses" EntityType="Self.warehouse" />
+    <EntitySet Name="View_role" EntityType="Self.View_role" />
+    <AssociationSet Name="FK__orderdeta__order__4AB81AF0" Association="Self.FK__orderdeta__order__4AB81AF0">
+      <End Role="order" EntitySet="orders" />
+      <End Role="orderdetail" EntitySet="orderdetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__orderdeta__produ__4BAC3F29" Association="Self.FK__orderdeta__produ__4BAC3F29">
+      <End Role="product" EntitySet="products" />
+      <End Role="orderdetail" EntitySet="orderdetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK__product__warehou__44FF419A" Association="Self.FK__product__warehou__44FF419A">
+      <End Role="warehouse" EntitySet="warehouses" />
+      <End Role="product" EntitySet="products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__useraccou__rolei__47DBAE45" Association="Self.FK__useraccou__rolei__47DBAE45">
+      <End Role="role" EntitySet="roles" />
+      <End Role="useraccount" EntitySet="useraccounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_useraccount_role" Association="Self.FK_useraccount_role">
+      <End Role="useraccount" EntitySet="useraccounts" />
+      <End Role="useraccount1" EntitySet="useraccounts" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
